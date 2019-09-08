@@ -1,4 +1,4 @@
-package com.infinite.life.algorithm.solution;
+package com.infinite.life.interests.algorithm.solution;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,13 +11,6 @@ import java.util.Stack;
 @Slf4j
 public class StackOfStringOperation {
 
-    public static void main(String[] args) {
-        String needDeal = "3+6*2-5*(9/(5*(4-2)-7)+(5/2-1))+8";  // 23-5*4=3
-//        String needDeal="1*2*(5/4+3)-5";
-        int result = deal(needDeal);
-        log.info("计算结果为[{}]",result);
-    }
-
     /**
      * 遍历字符串，数字进栈，操作符进栈
      * 此处未作相应的字符串检测规则，假设都是0-9的数值，表达式正确
@@ -25,7 +18,7 @@ public class StackOfStringOperation {
      * @param needDeal 待处理字符串
      * @return 字符串计算结果
      */
-    private static int deal(String needDeal) {
+    public static int deal(String needDeal) {
         Stack<Integer> value = new Stack<>();
         Stack<Character> operation = new Stack<>();
         for (int i = 0; i < needDeal.length(); i++) {
