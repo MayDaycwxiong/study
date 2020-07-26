@@ -1,0 +1,4 @@
+1. entity 使用common包是因为producer端投递到rabbitmq，和consumer端消费的对象序列化有问题，需要使用同一个对象
+2. producer 端 ack 配置 spring.rabbitmq.publisher-confirms=true 已经被弃用，需要使用spring.rabbitmq.publisher-confirm-type=correlated 才可以触发ack回调函数
+3. spring.rabbitmq.publisher-returns=true 回退函数在routingKey错误或者exchange找不到的时候会触发，但是还是会触发ack确认回调函数
+4. producer 端的定时任务本意是需要捞取发送失败[未被ack]的记录进行重试的，本处用于发送消息
