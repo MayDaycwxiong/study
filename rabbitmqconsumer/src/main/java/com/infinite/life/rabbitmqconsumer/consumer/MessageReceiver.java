@@ -31,7 +31,9 @@ public class MessageReceiver {
                                   Channel channel) throws Exception {
         log.info("消费端接收到消息，内容为:[{}]", singleDTO.toString());
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
-        // ACK
+        // 返回ACK，服务端会删除该消息
         channel.basicAck(deliveryTag, false);
+        //撤销该消息，让他从Nack回复到Ready中，其他消费者能继续拿这个消息
+//        channel.basicNack(deliveryTag,false,true);
     }
 }
