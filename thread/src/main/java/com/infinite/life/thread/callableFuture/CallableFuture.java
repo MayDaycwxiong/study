@@ -20,13 +20,13 @@ public class CallableFuture {
 
         Callable<String> call= () -> {
             log.info("start callable thread");
-            Thread.sleep(3*1000);
+            Thread.sleep(10*1000);
             log.info("end callable thread");
             return "callable result";
         };
 
         Future<String> task=exec.submit(call);
-        Thread.sleep(1*1000);
+        Thread.sleep(5*1000);
         log.info("waitting for the result of callable...");
 
         String retn=task.get();
@@ -36,6 +36,6 @@ public class CallableFuture {
         exec.shutdown();
         log.info("end main thread---");
 
-    }
+}
 
 }

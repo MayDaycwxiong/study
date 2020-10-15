@@ -2,6 +2,7 @@ package com.infinite.life.frame.quartz.job;
 
 import cn.hutool.core.util.StrUtil;
 import com.infinite.life.frame.quartz.scheduler.DaySchedulerManager;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -10,6 +11,7 @@ import org.quartz.JobExecutionException;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 @DisallowConcurrentExecution
 public class ConfigJob implements Job {
 
@@ -30,25 +32,25 @@ public class ConfigJob implements Job {
 
         String lastPeriod = "";
         if (StrUtil.isEmpty(lastPeriod)) {
-            lastPeriod = "3";
+            lastPeriod = "1";
         }
         if (!lastDateTime.equals(dateTime) || !lastPeriod.equals(period)) {
             configMap.put(DATETIME_CONFIG_LABLE, lastDateTime);
             configMap.put(PERIOD_CONFIG_LABLE, lastPeriod);
             // 调度另一个调度程序
-            System.out.println("调度另一个程序:" + new Date());
+            log.info("调度另一个程序:" + new Date());
             try {
                 String[] split = lastDateTime.split(StrUtil.COLON);
                 if (split.length == 3) {
                     new DaySchedulerManager(split, Integer.parseInt(lastPeriod)).deal();
                 } else {
-                    System.out.println("日期格式错误");
+                    log.info("日期格式错误");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("调度出现异常"+e);
             }
         } else {
-            System.out.println("值不变:" + new Date());
+            log.info("值不变:" + new Date());
         }
     }
 }

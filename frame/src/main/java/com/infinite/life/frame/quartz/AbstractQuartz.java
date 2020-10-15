@@ -6,7 +6,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import static org.quartz.TriggerKey.triggerKey;
 
 public abstract class AbstractQuartz<T extends ScheduleBuilder<Trigger>> {
-
     private final static String RAM_TRIGGER_GROUP = "RAM_TRIGGER_GROUP";
 
     private final static String RAM_JOB_GROUP = "RAM_JOB_GROUP";
@@ -17,7 +16,7 @@ public abstract class AbstractQuartz<T extends ScheduleBuilder<Trigger>> {
 
     protected abstract T getScheduleBuilder();
 
-    protected abstract void doSomething();
+    protected abstract void afterScheduleJobDeal();
 
     public abstract void deal();
 
@@ -45,10 +44,11 @@ public abstract class AbstractQuartz<T extends ScheduleBuilder<Trigger>> {
                     .withSchedule(this.getScheduleBuilder())
                     .endAt(quartzJob.getEndTime())
                     .build();
+            scheduler.deleteJob(JobKey.jobKey(quartzJob.getJobName(), RAM_JOB_GROUP));
             // 第一次
             JobDetail dayJob = getMyJob(quartzJob.getJobName(), quartzJob.getPeriod());
-            scheduler.scheduleJob(dayJob, dayTrigger);
-            this.doSomething();
+            scheduler.scheduleJob(dayJob,dayTrigger);
+            this.afterScheduleJobDeal();
         } else {
             JobDetail dayJob = getMyJob(quartzJob.getJobName(), quartzJob.getPeriod());
             scheduler.addJob(dayJob, true);
@@ -59,6 +59,7 @@ public abstract class AbstractQuartz<T extends ScheduleBuilder<Trigger>> {
                     .endAt(quartzJob.getEndTime())
                     .build();
             scheduler.rescheduleJob(dayTrigger.getKey(), newTrigger);
+            this.afterScheduleJobDeal();
         }
     }
 
@@ -66,6 +67,7 @@ public abstract class AbstractQuartz<T extends ScheduleBuilder<Trigger>> {
         return JobBuilder.newJob(this.getJobClazz())
                 .withIdentity(jobName, RAM_JOB_GROUP)
                 .usingJobData(PERIOD, period)
+                .storeDurably(true)
                 .build();
     }
 
