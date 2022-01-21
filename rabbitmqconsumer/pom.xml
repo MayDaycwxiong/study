@@ -24,7 +24,7 @@
         <junit.version>4.12</junit.version>
         <spring.version>4.3.18.RELEASE</spring.version>
         <powermock.version>2.0.0</powermock.version>
-        <h2database.version>1.4.197</h2database.version>
+        <h2database.version>2.1.210</h2database.version>
         <!--内部包-->
         <common.version>0.0.1-SNAPSHOT</common.version>
     </properties>
